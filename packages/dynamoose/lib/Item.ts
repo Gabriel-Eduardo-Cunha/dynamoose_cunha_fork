@@ -835,7 +835,11 @@ Item.objectFromSchema = async function (object: any, model: Model<Item>, setting
 		await Promise.all(attributesToCheck.map(async (key) => {
 			const check = async (): Promise<void> => {
 				const value = utils.object.get(returnObject, key);
-				await schema.requiredCheck(key, value as ValueType);
+				try {
+					await schema.requiredCheck(key, value as ValueType);
+				} catch (error) {
+					throw error;
+				}
 			};
 
 			const keyParts = key.split(".");
